@@ -7,7 +7,7 @@ class App extends Component{
     return(
       <div className="App">
         <BrowserRouter>
-          <Route path="/ToDoList" component={ToDoApp}/>
+          <Route path="/ToDOList" component={ToDoApp}/>
         </BrowserRouter>
       </div>
     )
