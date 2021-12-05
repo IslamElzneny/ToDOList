@@ -1,0 +1,193 @@
+import react,{Component} from 'react';
+import './App.css';
+import ShowObjects from './component/showObject';
+import Nav from "./component/nav";
+import ShowSchedule from './component/showSchedule';
+import {BrowserRouter,Route} from 'react-router-dom';
+import { Objects } from './component/showObject';
+class App extends Component {
+  state={
+    objects:[
+      {objectName:"لغة تجميع",groupNum:[
+        {n:1,day:["sat","wed"],priode:[[1,2,3],[1,2,3]]},
+        {n:2,day:["sat","wed"],priode:[[6,7,8],[1,2,3]]},
+        {n:3,day:["mon","wed"],priode:[[1,2,3],[6,7,8]]},] },
+      {objectName:"تراسل بيانات",groupNum:[
+        {n:1,day:["sat","tues"],priode:[[6,7,8],[1,2]]},
+        {n:2,day:["sat","tues"],priode:[[1,2,3],[7,8]]},
+        {n:3,day:["mon","wed"],priode:[[1,2,3],[4,5]]},] },
+      {objectName:"تصميم",groupNum:[
+        {n:1,day:["sun","mon"],priode:[[1,2,3],[4,5]]},
+        {n:2,day:["sun","mon"],priode:[[3,4,5],[7,8]]},
+        {n:3,day:["sat","tues"],priode:[[4,5,6],[1,2,3]]},] },
+      {objectName:"قواعد بيانات",groupNum:[
+        {n:1,day:["mon","tues"],priode:[[1,2,3],[6,7,8]]},
+        {n:2,day:["mon","tues"],priode:[[4,5,6],[3,4,5]]},
+        {n:3,day:["sat","sun"],priode:[[1,2,3],[6,7,8]]},] },
+      {objectName:"واجهات حاسب",groupNum:[
+        {n:1,day:["mon","wed"],priode:[[6,7,8],[7,8]]},
+        {n:2,day:["mon","wed"],priode:[[1,2,3],[4,5]]},
+        {n:3,day:["wed","tues"],priode:[[1,2,3],[4,5]]},] }
+
+    ]
+  }
+  allObjects=()=>{
+    const list=this.state.objects;
+    const array=[];
+    const lenList=list.length;
+    for(let i=0;i<lenList;i++){
+      array.push({value:i+1,label:list[i].objectName})
+    }
+    return array
+  }
+  render(){
+    return (
+      <BrowserRouter>
+  `      <div className="App">
+            <Nav />
+            <Route exact path="/" component={ShowObjects}/>
+            <Route path="/showSchedule" component={ShowSchedule}/>
+        </div>`
+      {Objects(this.allObjects(),this.state.objects)}
+      </BrowserRouter>
+    );
+  }  
+}
+export default App;
+
+// {value:1,label:"لغة تجميع "},
+// {value:2,label:"تراسل بيانات"},
+// {value:3,label:"تصميم" },
+//  {value:4,label:"قواعد بيانات"},
+//  {value:5, label :"واجهات حاسب"}
+
+============================================================================
+
+import react,{Component} from "react";
+import Select from "react-select";
+import { SelectObjects } from "./showSchedule";
+
+var array=[];
+var select=[];
+var objects;
+var Options;
+export const Objects=(props,options)=>{
+    objects=props;
+    Options=options;
+}
+class ShowObjects extends Component{
+    state={
+        Options:objects,
+        Select:[]
+    }
+     handleChange= (e) =>{
+         array.push(e)
+        return array
+    }
+    
+    handleSubmit=e =>{
+        e.preventDefault();
+    }
+    handleClick=()=>{
+        var i=this.handleChange();
+        if(i.length>1){
+            var list=i[i.length-2];
+            var len=list.length;
+            for(let i=0; i<len;i++){
+                select.push(list[i].label);
+            }
+            this.setState({
+                Select:select})
+            document.getElementById("add").style.display="none";
+            document.getElementById("press").innerHTML="Press show Schedule";
+        }else{
+            console.log("Error")
+            this.setState({Select:["No Items"]})
+        }
+    }
+    
+    render(){
+        return(
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                <Select isMulti options={this.state.Options} onChange={this.handleChange} id="select"></Select>
+                <button type="submit" onClick={this.handleClick} id="add"> Add </button>
+                </form>
+                <p id="press"></p>
+                {SelectObjects(this.state.Select,Options)}
+            </div>
+        )
+    }
+}
+
+export default ShowObjects;
+====================================================================
+
+import React from "react";
+import { NavLink } from "react-router-dom";
+const Nav =()=>{
+    return(
+        <div>
+            <a href="#">Logo</a>
+            <ul>
+                <a exact href="/">ShowObjects</a>
+                <NavLink  to="/showSchedule">showSchedule</NavLink>
+            </ul>
+        </div>
+    )
+}
+export default Nav;
+
+===================================================================
+
+import react from "react";
+var selectObjects=["."];
+var Options;
+export const SelectObjects=(props,options)=>{
+    selectObjects=props;
+    Options=options;
+}
+const ShowSchedule =() =>{
+
+        const handelSelect=()=>{
+            const optionSelect=[]; 
+                for(var i=0;i<selectObjects.length;i++){
+                    for(var y=0;y<5;y++){
+                        if(selectObjects[i]==Options[y].objectName){
+                            optionSelect.push(Options[y]);
+                            break;
+                        }
+                    }
+                }
+            return optionSelect
+        }
+        const handleSchedule=()=>{
+            const x=handelSelect();
+            const y=0;
+            const schedule=[{name:x[1].objectName,Gn:x[1].groupNam[0].n}];
+            if(selectObjects.length==1){
+                return <p>No</p>
+            }else{
+                return console.log(schedule);
+            }
+        }
+        return(
+            <div>
+                <div className="selection">
+                    {
+                        selectObjects.map(object =>{
+                        return(
+                            <div key={Math.random()}>
+                                <p>{object}</p>
+                            </div>
+                        ) } )
+                    }
+                    {selectObjects.length}
+                    {handleSchedule()}
+                </div>
+            </div>
+            
+        )
+    }
+
+export default ShowSchedule;

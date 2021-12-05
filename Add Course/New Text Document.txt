@@ -1,0 +1,154 @@
+import react,{Component} from 'react';
+import CourseForm from './components/courseForm';
+import CourseList from './components/courseList';
+
+
+let input=document.createElement("input");
+class App extends Component {
+  state={
+     courses:[
+       {id:1,name:"HTML"},
+       {id:2,name:"CSS"},
+       {id:3,name:"JS"}
+     ],
+     msg:""
+  }
+  addCourse=(fetchData)=>{
+    let len=this.state.courses.length;
+    let Id=this.state.courses.length+1;
+    this.state.courses[len]={id:Id,name:fetchData};
+    this.setState({courses:this.state.courses})
+    if(this.state.courses.length>0){
+      this.setState({
+        msg:""
+      })
+    }
+  }
+  deleteCourse=(idNum)=>{
+    let count=0;
+    this.state.courses.map(e=>{
+      if(e.id==idNum){
+        this.state.courses.splice(count,1);
+        return(
+          this.setState({
+            courses:this.state.courses,
+            msg:""
+          })
+        )
+      }
+      count +=1;
+    });
+    if(this.state.courses.length==0){
+      this.setState({
+        msg:"there is not Items"
+      })
+    }
+
+  }
+
+  editeCourse=(idNum)=>{
+    let myDiv=document.getElementById("div"+idNum);
+    let mySpan=document.getElementById(idNum);
+    let myDeleteBtn=document.getElementById("delete"+idNum);
+    let myEditBtn=document.getElementById("edit"+idNum);
+    let myUpdateBtn=document.getElementById("update"+idNum);
+    
+    let courseName=this.state.courses.map(e=>{
+      if(e.id==idNum){
+        return e.name
+      }
+    })
+    let valueInput=courseName.filter(e=> e!=undefined);
+    input.value=valueInput;
+    mySpan.style.display="none";
+    myDeleteBtn.style.display="none";
+    myEditBtn.style.display="none";
+    myUpdateBtn.style.display="inline";
+    myDiv.prepend(input)
+  }
+  
+  updateCourse=(idNum)=>{
+    let mySpan=document.getElementById(idNum);
+    let myDeleteBtn=document.getElementById("delete"+idNum);
+    let myEditBtn=document.getElementById("edit"+idNum);
+    let myUpdateBtn=document.getElementById("update"+idNum);
+
+    mySpan.innerHTML=input.value;
+    myUpdateBtn.style.display="none";
+    input.remove();
+    mySpan.style.display="inline";
+    myDeleteBtn.style.display="inline";
+    myEditBtn.style.display="inline";
+
+  }
+  render(){
+    return (
+      <div className="App">
+        <h2>Add Course</h2>
+        <CourseForm  funAdd={this.addCourse}/>
+        <CourseList courses={this.state.courses} funDelete={this.deleteCourse} funEdite={this.editeCourse} funUpdate={this.updateCourse} msg={this.state.msg}/>
+      </div>
+    );
+  }  
+}
+export default App; 
+
+=======================================================================
+.update
+{
+  display: none;
+}
+
+==========================================================
+import react from 'react';
+const CourseForm= (props)=>{
+    const handleClick=()=>{
+        let input=document.getElementById("input");
+        if(input.value.length>0){
+            let fetchData =input.value;
+            input.value="";
+            props.funAdd(fetchData);
+        }else{
+            alert("No Value");
+        }
+    }
+
+    return (
+      <div className="">
+        <input type="text" id="input"/>
+        <button onClick={handleClick}> Add Course </button>
+      </div>
+    );
+  }  
+export default CourseForm; 
+===============================================================
+import react from 'react';
+const CourseList= (props)=>{
+    const handleEdite=(e)=>{
+        props.funEdite(e.target.name)
+    }
+    const handleDelete=(e)=>{
+        props.funDelete(e.target.name)
+    }
+    const handleUpdate=(e)=>{
+        props.funUpdate(e.target.name)
+    }
+    return (
+      <div className="">
+        {props.courses.map(e=> {
+            return(
+                <div key={e.id} id={"div"+e.id}>
+                   <span id={e.id}>{e.name}</span>
+                   <button id={"edit"+e.id} name={e.id} onClick={handleEdite} className="edit">Edite Course</button>
+                   <button id={"delete"+e.id} name={e.id} onClick={handleDelete} className="delete">Delete Course</button>
+                   <button id={"update"+e.id} name={e.id} onClick={handleUpdate} className="update">Update Course</button>
+                </div>
+                
+            )
+        } )}
+        <p className="massege">{props.msg}</p>
+      </div>
+    );
+  }  
+export default CourseList; 
+=========================================================

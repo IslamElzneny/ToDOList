@@ -1,0 +1,97 @@
+html,body
+{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: cursive;
+}
+#root
+{
+  width: 55%;
+}
+.App
+{
+  width: 100%;
+  margin-top: 100px;
+}
+.titleName
+{
+  text-align: center;
+  font-size: 25px;
+}
+.header
+{
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10px;
+  background-color: #7494ec82;
+}
+.containUsers
+{
+  background-color: #94929438;
+}
+.usersName
+{
+  display: flex;
+  justify-content: space-evenly;
+}
+.usersName span
+{
+  overflow:auto;
+  width:40%
+}
+.usersName .delete
+{
+  width: 15%;
+  background: #7494ec82;
+  text-align: center;
+  margin-top: 5px;
+}
+.usersName .delete:hover
+{
+  cursor: pointer;
+}
+form
+{
+  background-color: #7494ec82;
+  margin-top: 15px;
+}
+form #name,#age
+{
+  width: 40%;
+  background-color: #c6ffc8f5;
+  height: 25px;
+  font-size: 18px;
+  margin: 10px 3px;
+}
+form #add
+{
+    width: 15%;
+    height: 30px;
+    background: #adbcea;
+    border-radius: 5px;
+}
+form #add:hover
+{
+cursor: pointer;
+}
+@media screen and (min-width:200px) and (max-width:700px) {
+    #root{
+      width: 95%;
+    }
+    .to_do_lists
+    {
+      width: 100%;
+    }
+    form{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form input:not(type="submit"){
+      width: 95%;
+    }
+}
